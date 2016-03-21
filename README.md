@@ -1,6 +1,6 @@
 # lilypond musical typesetting
 
-## why another lilypond iamge
+## why another lilypond image
 
 I needed some more packages to use this image for a gitlab CI runner. It is possible
 to use this image to build lilypond files from a gitlab repository fully automated.
@@ -26,7 +26,6 @@ lilyfy:
 deploy:
   stage: deploy
   script:
-    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
     - eval $(ssh-agent -s)
     - echo "$DEPLOY_KEY" | ssh-add -
     - mkdir -p ~/.ssh
@@ -36,7 +35,7 @@ deploy:
     - scp -r /pdfs/* $SCP_TARGET_PATH
 ```
 
-The script will deploy via SSH. The required private key has to stored in the gitlab CI variable "DEPLOY_KEY", the scp target path in SCP_TARGET_PATH (something
+The script will deploy via SSH. The required private key has to be stored in the gitlab CI variable "DEPLOY_KEY", the scp target path in SCP_TARGET_PATH (something
 like '<user>@<host>:<path>'.
 
 ## standalone usage
