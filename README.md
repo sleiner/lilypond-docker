@@ -21,17 +21,24 @@ lilyfy:
   script:
     - mkdir -p /pdfs
     - 'git diff-tree --no-commit-id --name-only -r "$CI_BUILD_REF" | grep ".ly$" | grep -v setup.ly | xargs -I % find "%" -name \*.ly -execdir lilypond "--output=/pdfs/{}" "{}" \;'
+  artifacts:
+    expire_in: 31d
+    paths:
+    - pdfs/*.pdf
+    - pdfs/*.mid*
 
-# as it is not possible currently to pass files between stages, we have to rebuild in the deploy stage:
 deploy:
+  dependencies:
+    - lilyfy
   stage: deploy
+  only:
+    - master
   script:
     - eval $(ssh-agent -s)
     - echo "$DEPLOY_KEY" | ssh-add -
     - mkdir -p ~/.ssh
-    - '[[ -f /.dockerinit ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
     - mkdir -p /pdfs
-    - 'git diff-tree --no-commit-id --name-only -r "$CI_BUILD_REF" | grep ".ly$" | grep -v setup.ly | xargs -I % find "%" -name \*.ly -execdir lilypond "--output=/pdfs/{}" "{}" \;'
     - scp -r /pdfs/* $SCP_TARGET_PATH
 ```
 
