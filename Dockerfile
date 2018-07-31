@@ -2,7 +2,7 @@
 FROM debian:testing
 MAINTAINER Iskaron <mail@iskaron.de>
 
-RUN apt-get update && apt-get install -y wget bzip2 ghostscript openssh-client git && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y wget bzip2 ghostscript openssh-client git curl && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /root
 
